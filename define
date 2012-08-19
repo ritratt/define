@@ -21,6 +21,8 @@ def parsecontent(urlcontent):
 	for i in range(0,len(meaning_head)):
 		try:
 			extracted=meaning_head[i]['entries'][1]['terms'][0]['text']
+			extracted=extracted.replace('<i>','(')
+			extracted=extracted.replace('</i>',')')
 			print extracted
 		except IndexError:
 			break
