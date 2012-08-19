@@ -1,0 +1,36 @@
+#!/usr/bin/python
+import urllib,ast
+from sys import argv
+
+
+
+def geturl(word):
+	url='http://www.google.com/dictionary/json?callback=a&sl=en&tl=en&q='+word
+	return url
+
+def geturlcontent(url):
+	urlgetrequest=urllib.urlopen(url)
+	urlcontent=urlgetrequest.read()
+	urlgetrequest.close()
+	urlcontent=urlcontent[2:-10]	#This strips the callback function data.
+	return urlcontent
+
+def parsecontent(urlcontent):
+	abstract_syntax=ast.literal_eval(urlcontent)
+	meaning_head=abstract_syntax['primaries']
+	for i in range(0,len(meaning_head)):
+		try:
+			extracted=meaning_head[i]['entries'][1]['terms'][0]['text']
+			print extracted
+		except IndexError:
+			break
+
+
+try:
+	word=argv[1]
+	url=geturl(word)
+	urlcontent=geturlcontent(url)
+	parsecontent(urlcontent)
+except:
+	print 'define takes one parameter only. Please try again.'
+
